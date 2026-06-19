@@ -1,1754 +1,662 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ClassBoard — Sign-Up Sheet</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
-
+<title>Custom Wheel Spin</title>
 <style>
-:root {
-  --bg: #F7F5F0;
-  --surface: #FFFFFF;
-  --surface2: #F0EDE6;
-  --border: #E2DDD5;
-  --border-strong: #C8C3BA;
-  --text: #1A1815;
-  --text-muted: #7A756D;
-  --text-light: #A8A29A;
-  --accent: #2D6A4F;
-  --accent-light: #E8F5EE;
-  --accent-mid: #52B788;
-  --warn: #C77B1A;
-  --warn-bg: #FEF3E2;
-  --danger: #C0392B;
-  --danger-bg: #FDEDEC;
-  --info: #1A5276;
-  --info-bg: #EBF5FB;
-  --radius: 10px;
-  --radius-sm: 6px;
-  --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
-  --shadow-lg: 0 4px 12px rgba(0,0,0,0.1), 0 2px 4px rgba(0,0,0,0.06);
-}
-
-* { box-sizing: border-box; margin: 0; padding: 0; }
-
-body {
-  font-family: 'DM Sans', sans-serif;
-  background: var(--bg);
-  color: var(--text);
-  min-height: 100vh;
-  font-size: 15px;
-  line-height: 1.5;
-}
-
-/* ─── HEADER ─────────────────────────────── */
-.header {
-  background: var(--surface);
-  border-bottom: 1px solid var(--border);
-  padding: 0 2rem;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  height: 60px;
-  position: sticky;
-  top: 0;
-  z-index: 100;
-}
-
-.logo {
-  font-size: 19px;
-  font-weight: 600;
-  letter-spacing: -0.5px;
-  color: var(--text);
-}
-
-.logo span {
-  color: var(--accent);
-}
-
-.header-right {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-/* ─── BUTTONS ─────────────────────────────── */
-.btn {
-  padding: 8px 16px;
-  border-radius: var(--radius-sm);
-  border: 1px solid var(--border-strong);
-  background: var(--surface);
-  color: var(--text);
-  font-family: inherit;
-  font-size: 14px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.15s;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-}
-.btn:hover { background: var(--surface2); }
-.btn:active { transform: scale(0.98); }
-
-.btn-primary {
-  background: var(--accent);
-  color: #fff;
-  border-color: var(--accent);
-}
-.btn-primary:hover { background: #235C42; }
-
-.btn-warn {
-  background: var(--warn-bg);
-  color: var(--warn);
-  border-color: #F0C070;
-}
-.btn-warn:hover { background: #FDE9C7; }
-
-.btn-danger {
-  background: var(--danger-bg);
-  color: var(--danger);
-  border-color: #F0A899;
-}
-.btn-danger:hover { background: #FCDAD8; }
-
-.btn-sm {
-  padding: 5px 10px;
-  font-size: 13px;
-}
-
-/* ─── MAIN LAYOUT ─────────────────────────── */
-.main {
-  max-width: 1100px;
-  margin: 0 auto;
-  padding: 2rem;
-}
-
-/* ─── STUDENT VIEW ────────────────────────── */
-#student-view { display: block; }
-#teacher-view { display: none; }
-
-.page-title {
-  font-size: 26px;
-  font-weight: 600;
-  letter-spacing: -0.5px;
-  margin-bottom: 4px;
-}
-.page-sub {
-  color: var(--text-muted);
-  font-size: 14px;
-  margin-bottom: 2rem;
-}
-
-/* Sign-up card */
-.signup-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 1.75rem;
-  box-shadow: var(--shadow);
-  margin-bottom: 1.5rem;
-}
-
-.signup-card h2 {
-  font-size: 16px;
-  font-weight: 600;
-  margin-bottom: 1.25rem;
-  padding-bottom: 0.75rem;
-  border-bottom: 1px solid var(--border);
-}
-
-.form-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1rem;
-  margin-bottom: 1rem;
-}
-
-.form-group {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.form-group label {
-  font-size: 13px;
-  font-weight: 500;
-  color: var(--text-muted);
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-}
-
-.form-group input,
-.form-group select,
-.form-group textarea {
-  padding: 10px 12px;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  background: var(--surface);
-  font-family: inherit;
-  font-size: 14px;
-  color: var(--text);
-  transition: border-color 0.15s;
-  outline: none;
-}
-.form-group input:focus,
-.form-group select:focus,
-.form-group textarea:focus {
-  border-color: var(--accent-mid);
-  box-shadow: 0 0 0 3px rgba(82,183,136,0.12);
-}
-
-/* ─── SIGNUP TABLE ────────────────────────── */
-.table-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow);
-  overflow: hidden;
-}
-
-.table-header {
-  display: grid;
-  grid-template-columns: 40px 1fr 1fr 120px;
-  padding: 10px 16px;
-  background: var(--surface2);
-  border-bottom: 1px solid var(--border);
-  font-size: 12px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  color: var(--text-muted);
-}
-
-.table-row {
-  display: grid;
-  grid-template-columns: 40px 1fr 1fr 120px;
-  padding: 12px 16px;
-  border-bottom: 1px solid var(--border);
-  align-items: center;
-  transition: background 0.1s;
-  font-size: 14px;
-}
-.table-row:last-child { border-bottom: none; }
-.table-row:hover { background: var(--surface2); }
-
-.row-num {
-  font-family: 'DM Mono', monospace;
-  font-size: 12px;
-  color: var(--text-light);
-}
-
-.tag {
-  display: inline-block;
-  padding: 3px 9px;
-  border-radius: 20px;
-  font-size: 12px;
-  font-weight: 500;
-}
-
-.tag-flagged {
-  background: var(--warn-bg);
-  color: var(--warn);
-  border: 1px solid #F0C070;
-}
-.tag-ok {
-  background: var(--accent-light);
-  color: var(--accent);
-  border: 1px solid #A8DFC0;
-}
-.tag-pending {
-  background: var(--info-bg);
-  color: var(--info);
-  border: 1px solid #AED6F1;
-}
-
-.empty-state {
-  padding: 3rem;
-  text-align: center;
-  color: var(--text-muted);
-  font-size: 14px;
-}
-
-.empty-icon {
-  font-size: 32px;
-  margin-bottom: 0.5rem;
-  opacity: 0.3;
-}
-
-/* ─── TEACHER PANEL ───────────────────────── */
-.teacher-tabs {
-  display: flex;
-  gap: 2px;
-  margin-bottom: 1.5rem;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 4px;
-  width: fit-content;
-}
-
-.tab-btn {
-  padding: 7px 16px;
-  border-radius: var(--radius-sm);
-  border: none;
-  background: transparent;
-  font-family: inherit;
-  font-size: 14px;
-  font-weight: 500;
-  cursor: pointer;
-  color: var(--text-muted);
-  transition: all 0.15s;
-  position: relative;
-}
-.tab-btn:hover { color: var(--text); background: var(--surface2); }
-.tab-btn.active {
-  background: var(--accent);
-  color: #fff;
-}
-
-.badge {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 18px;
-  height: 18px;
-  border-radius: 9px;
-  font-size: 11px;
-  font-weight: 600;
-  padding: 0 5px;
-  background: var(--danger);
-  color: #fff;
-  margin-left: 6px;
-}
-
-.tab-panel { display: none; }
-.tab-panel.active { display: block; }
-
-/* ─── GRID LAYOUTS ────────────────────────── */
-.grid-2 {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1.25rem;
-}
-
-.card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 1.5rem;
-  box-shadow: var(--shadow);
-}
-
-.card h3 {
-  font-size: 15px;
-  font-weight: 600;
-  margin-bottom: 1rem;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.card h3 .icon {
-  font-size: 18px;
-}
-
-/* ─── WHEEL ───────────────────────────────── */
-#wheelCanvas {
-  display: block;
-  margin: 0 auto;
-  max-width: 280px;
-}
-
-.wheel-result {
-  text-align: center;
-  margin-top: 1rem;
-  font-size: 16px;
-  font-weight: 600;
-  min-height: 28px;
-  color: var(--accent);
-}
-
-/* ─── MAILBOX ─────────────────────────────── */
-.mail-item {
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  padding: 12px 14px;
-  margin-bottom: 8px;
-  background: var(--surface);
-  transition: background 0.1s;
-}
-.mail-item:hover { background: var(--surface2); }
-.mail-item.unread { border-left: 3px solid var(--warn); }
-.mail-item.flag-type { border-left: 3px solid var(--danger); }
-.mail-item.edit-type { border-left: 3px solid var(--accent-mid); }
-
-.mail-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 4px;
-}
-
-.mail-from {
-  font-weight: 600;
-  font-size: 14px;
-}
-
-.mail-time {
-  font-size: 12px;
-  color: var(--text-light);
-}
-
-.mail-subject {
-  font-size: 13px;
-  color: var(--text-muted);
-  margin-bottom: 8px;
-}
-
-.mail-actions {
-  display: flex;
-  gap: 8px;
-  margin-top: 8px;
-}
-
-/* ─── DROPDOWN BUILDER ────────────────────── */
-.category-list {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  margin-bottom: 1rem;
-}
-
-.category-item {
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  padding: 10px 12px;
-  background: var(--surface2);
-}
-
-.category-item-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 6px;
-}
-
-.category-name {
-  font-weight: 600;
-  font-size: 14px;
-}
-
-.option-chips {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-}
-
-.chip {
-  background: var(--accent-light);
-  color: var(--accent);
-  border: 1px solid #A8DFC0;
-  border-radius: 20px;
-  padding: 3px 10px;
-  font-size: 12px;
-  font-weight: 500;
-  display: flex;
-  align-items: center;
-  gap: 5px;
-}
-
-.chip-del {
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: var(--accent);
-  font-size: 14px;
-  line-height: 1;
-  padding: 0;
-  opacity: 0.6;
-}
-.chip-del:hover { opacity: 1; }
-
-/* ─── MODAL ───────────────────────────────── */
-.modal-backdrop {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.45);
-  z-index: 1000;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.2s;
-}
-.modal-backdrop.open {
-  opacity: 1;
-  pointer-events: all;
-}
-
-.modal {
-  background: var(--surface);
-  border-radius: var(--radius);
-  padding: 2rem;
-  width: 440px;
-  max-width: calc(100vw - 2rem);
-  box-shadow: var(--shadow-lg);
-  transform: translateY(8px);
-  transition: transform 0.2s;
-}
-.modal-backdrop.open .modal {
-  transform: translateY(0);
-}
-
-.modal h2 {
-  font-size: 18px;
-  font-weight: 600;
-  margin-bottom: 1.25rem;
-}
-
-.modal-footer {
-  display: flex;
-  justify-content: flex-end;
-  gap: 8px;
-  margin-top: 1.5rem;
-}
-
-/* ─── TOAST ───────────────────────────────── */
-#toast {
-  position: fixed;
-  bottom: 2rem;
-  right: 2rem;
-  background: var(--text);
-  color: #fff;
-  padding: 12px 18px;
-  border-radius: var(--radius);
-  font-size: 14px;
-  font-weight: 500;
-  z-index: 9999;
-  opacity: 0;
-  transform: translateY(8px);
-  transition: all 0.25s;
-  pointer-events: none;
-  max-width: 300px;
-}
-#toast.show {
-  opacity: 1;
-  transform: translateY(0);
-}
-#toast.success { background: var(--accent); }
-#toast.warn { background: var(--warn); }
-#toast.error { background: var(--danger); }
-
-/* ─── DIVIDER ─────────────────────────────── */
-.divider {
-  height: 1px;
-  background: var(--border);
-  margin: 1.25rem 0;
-}
-
-/* ─── TEACHER TABLE (wider) ───────────────── */
-.teacher-table-header {
-  display: grid;
-  grid-template-columns: 32px 1fr 1fr 100px 130px;
-  padding: 10px 16px;
-  background: var(--surface2);
-  border-bottom: 1px solid var(--border);
-  font-size: 12px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  color: var(--text-muted);
-}
-
-.teacher-table-row {
-  display: grid;
-  grid-template-columns: 32px 1fr 1fr 100px 130px;
-  padding: 11px 16px;
-  border-bottom: 1px solid var(--border);
-  align-items: center;
-  font-size: 14px;
-  transition: background 0.1s;
-}
-.teacher-table-row:last-child { border-bottom: none; }
-.teacher-table-row:hover { background: var(--surface2); }
-.teacher-table-row.flagged-row { background: #FFFBF0; }
-.teacher-table-row.flagged-row:hover { background: #FFF5D6; }
-
-/* ─── STATS ROW ───────────────────────────── */
-.stats-row {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 1rem;
-  margin-bottom: 1.5rem;
-}
-
-.stat-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 1rem 1.25rem;
-  box-shadow: var(--shadow);
-}
-
-.stat-label {
-  font-size: 12px;
-  font-weight: 500;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: var(--text-muted);
-  margin-bottom: 6px;
-}
-
-.stat-value {
-  font-size: 26px;
-  font-weight: 600;
-  letter-spacing: -0.5px;
-  color: var(--text);
-}
-
-.stat-card.warn .stat-value { color: var(--warn); }
-.stat-card.accent .stat-value { color: var(--accent); }
-.stat-card.danger .stat-value { color: var(--danger); }
-
-/* login */
-.login-wrap {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: calc(100vh - 60px);
-}
-
-.login-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 2.5rem;
-  width: 360px;
-  box-shadow: var(--shadow-lg);
-  text-align: center;
-}
-
-.login-card h2 {
-  font-size: 20px;
-  font-weight: 600;
-  margin-bottom: 0.5rem;
-}
-
-.login-card p {
-  color: var(--text-muted);
-  font-size: 14px;
-  margin-bottom: 1.5rem;
-}
-
-#teacher-login-view { display: none; }
-#teacher-dashboard { display: none; }
-
-/* edit request */
-.edit-badge {
-  display: inline-block;
-  background: var(--info-bg);
-  color: var(--info);
-  border: 1px solid #AED6F1;
-  border-radius: 20px;
-  font-size: 11px;
-  font-weight: 600;
-  padding: 2px 8px;
-  margin-left: 6px;
-}
-
-.wheel-wrap {
-  position: relative;
-}
-
-.spin-btn {
-  display: block;
-  margin: 1rem auto 0;
-}
-
-hr { border: none; border-top: 1px solid var(--border); margin: 1rem 0; }
-
-/* ─── RESPONSIVE ──────────────────────────── */
-@media (max-width: 700px) {
-  .form-row { grid-template-columns: 1fr; }
-  .grid-2 { grid-template-columns: 1fr; }
-  .stats-row { grid-template-columns: 1fr 1fr; }
-  .teacher-table-header,
-  .teacher-table-row { grid-template-columns: 32px 1fr 1fr 100px; }
-  .teacher-table-header span:last-child,
-  .teacher-table-row span:last-child { display: none; }
-  .table-header,
-  .table-row { grid-template-columns: 36px 1fr 1fr; }
-  .table-header span:last-child,
-  .table-row span:last-child { display: none; }
-  .main { padding: 1rem; }
-}
+  :root {
+    --bg: #f7f6f3;
+    --surface: #ffffff;
+    --border: #e3e1d9;
+    --border-strong: #cfccc0;
+    --text: #1f1e1c;
+    --text-secondary: #6b6a64;
+    --accent: #1f1e1c;
+    --radius-md: 8px;
+    --radius-lg: 12px;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    display: flex;
+    justify-content: center;
+    padding: 2rem 1rem 4rem;
+  }
+  .app {
+    width: 100%;
+    max-width: 920px;
+    display: grid;
+    grid-template-columns: 360px 1fr;
+    gap: 2rem;
+    align-items: start;
+  }
+  @media (max-width: 760px) {
+    .app { grid-template-columns: 1fr; }
+  }
+  h1 {
+    font-size: 20px;
+    font-weight: 600;
+    margin: 0 0 1.5rem;
+    text-align: center;
+  }
+  .wheel-col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.25rem;
+  }
+  .wheel-wrap {
+    position: relative;
+    width: 320px;
+    height: 320px;
+  }
+  #pointer {
+    position: absolute;
+    top: -2px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0; height: 0;
+    border-left: 13px solid transparent;
+    border-right: 13px solid transparent;
+    border-top: 22px solid var(--accent);
+    z-index: 10;
+    filter: drop-shadow(0 1px 1px rgba(0,0,0,0.15));
+  }
+  #wheel {
+    width: 320px;
+    height: 320px;
+    transform: rotate(0deg);
+    transition: transform 4s cubic-bezier(0.17, 0.67, 0.12, 0.99);
+    border-radius: 50%;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+  }
+  .hub {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    background: var(--surface);
+    border: 1px solid var(--border-strong);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+  }
+  button {
+    font-family: inherit;
+    font-size: 14px;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-strong);
+    background: var(--surface);
+    color: var(--text);
+    padding: 8px 14px;
+    cursor: pointer;
+    transition: background 0.15s, transform 0.05s;
+  }
+  button:hover { background: var(--bg); }
+  button:active { transform: scale(0.98); }
+  button:disabled { opacity: 0.5; cursor: not-allowed; }
+  #spin-btn {
+    width: 180px;
+    font-weight: 600;
+    padding: 10px 14px;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+  }
+  #spin-btn:hover { background: #3a3935; }
+  #result {
+    min-height: 24px;
+    font-size: 16px;
+    font-weight: 600;
+    text-align: center;
+  }
+  .panel {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 1rem 1.1rem;
+  }
+  .panel + .panel { margin-top: 1rem; }
+  .panel h2 {
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    color: var(--text-secondary);
+    margin: 0 0 0.75rem;
+  }
+  .item-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--bg);
+    border-radius: var(--radius-md);
+    padding: 6px 10px;
+    margin-bottom: 6px;
+  }
+  .swatch {
+    width: 12px; height: 12px;
+    border-radius: 50%;
+    flex: 0 0 auto;
+  }
+  .item-row .label {
+    flex: 1;
+    font-size: 14px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .item-row input[type="number"] {
+    width: 64px;
+    text-align: right;
+    font-family: inherit;
+    font-size: 13px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 4px 6px;
+    background: var(--surface);
+  }
+  .pct-sign {
+    font-size: 13px;
+    color: var(--text-secondary);
+    width: 12px;
+  }
+  .icon-btn {
+    flex: 0 0 auto;
+    width: 26px; height: 26px;
+    padding: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px;
+  }
+  .add-row {
+    display: flex;
+    gap: 8px;
+    margin-top: 0.5rem;
+  }
+  .add-row input[type="text"] {
+    flex: 2;
+    font-family: inherit;
+    font-size: 14px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 8px 10px;
+    background: var(--bg);
+  }
+  .add-row input[type="number"] {
+    flex: 1;
+    font-family: inherit;
+    font-size: 14px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 8px 10px;
+    background: var(--bg);
+  }
+  #total-warning {
+    font-size: 12px;
+    color: var(--text-secondary);
+    margin-top: 0.5rem;
+  }
+  .history-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    max-height: 200px;
+    overflow-y: auto;
+  }
+  .history-list li {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    padding: 6px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .history-list li:last-child { border-bottom: none; }
+  .history-list .h-label { font-weight: 500; }
+  .history-list .h-time { color: var(--text-secondary); }
+  .empty-msg {
+    font-size: 13px;
+    color: var(--text-secondary);
+    text-align: center;
+    padding: 0.5rem 0;
+  }
+  .setup-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--bg);
+    border-radius: var(--radius-md);
+    padding: 6px 10px;
+    margin-bottom: 6px;
+  }
+  .setup-row .label { flex: 1; font-size: 14px; }
+  .setup-row button { font-size: 12px; padding: 5px 10px; }
+  .save-row {
+    display: flex;
+    gap: 8px;
+    margin-top: 0.5rem;
+  }
+  .save-row input[type="text"] {
+    flex: 1;
+    font-family: inherit;
+    font-size: 14px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 8px 10px;
+    background: var(--bg);
+  }
+  .top-actions {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 1rem;
+  }
+  .clear-link {
+    font-size: 12px;
+    color: var(--text-secondary);
+    background: none;
+    border: none;
+    text-decoration: underline;
+    cursor: pointer;
+    padding: 0;
+  }
 </style>
 </head>
 <body>
 
-<!-- ═══════════ HEADER ═══════════ -->
-<header class="header">
-  <div class="logo">Class<span>Board</span></div>
-  <div class="header-right">
-    <span id="header-status" style="font-size:13px;color:var(--text-muted)">Student View</span>
-    <button class="btn btn-sm" id="teacher-toggle-btn" onclick="showTeacherLogin()">🔒 Teacher Login</button>
+<div class="app">
+  <div class="wheel-col">
+    <h1>Custom wheel spin</h1>
+    <div class="wheel-wrap">
+      <div id="pointer"></div>
+      <svg id="wheel" viewBox="0 0 320 320">
+        <g id="wheel-segments"></g>
+        <circle cx="160" cy="160" r="158" fill="none" stroke="rgba(0,0,0,0.08)" stroke-width="1"></circle>
+      </svg>
+      <div class="hub">🎯</div>
+    </div>
+    <button id="spin-btn">▶ Spin the wheel</button>
+    <div id="result"></div>
+
+    <div class="panel" style="width: 100%; max-width: 320px;">
+      <div style="display:flex; justify-content: space-between; align-items: center;">
+        <h2 style="margin:0;">Spin history</h2>
+        <button class="clear-link" id="clear-history">clear</button>
+      </div>
+      <ul class="history-list" id="history-list"></ul>
+      <div class="empty-msg" id="history-empty">No spins yet</div>
+    </div>
   </div>
-</header>
 
-<!-- ═══════════ TOAST ═══════════ -->
-<div id="toast"></div>
-
-<!-- ═══════════ STUDENT VIEW ═══════════ -->
-<div id="student-view">
-  <div class="main">
-    <h1 class="page-title">Sign-Up Sheet</h1>
-    <p class="page-sub" id="student-subtitle">Add your name and topic for today's class</p>
-
-    <!-- Sign-up form -->
-    <div class="signup-card" id="signup-form-card">
-      <h2>📝 Add Your Entry</h2>
-
-      <div id="category-dropdowns"></div>
-
-      <div class="form-row">
-        <div class="form-group">
-          <label>Your Name <span style="color:var(--danger)">*</span></label>
-          <input type="text" id="student-name" placeholder="First and last name" autocomplete="off">
-        </div>
-        <div class="form-group">
-          <label>Group / Team Name <span style="color:var(--danger)">*</span></label>
-          <input type="text" id="student-group" placeholder="e.g. The Rockets" autocomplete="off">
-        </div>
+  <div>
+    <div class="panel">
+      <h2>Items &amp; percentages</h2>
+      <div id="item-list"></div>
+      <div class="add-row">
+        <input type="text" id="new-label" placeholder="Item name" />
+        <input type="number" id="new-pct" placeholder="%" min="0" max="100" step="0.1" />
+        <button id="add-btn">+</button>
       </div>
-
-      <div class="form-row">
-        <div class="form-group">
-          <label>Topic <span style="color:var(--danger)">*</span></label>
-          <input type="text" id="student-topic" placeholder="What are you presenting on?" autocomplete="off">
-        </div>
-        <div class="form-group">
-          <label>Notes (optional)</label>
-          <input type="text" id="student-notes" placeholder="Any extra info..." autocomplete="off">
-        </div>
-      </div>
-
-      <div style="display:flex;justify-content:flex-end;margin-top:0.5rem">
-        <button class="btn btn-primary" onclick="submitEntry()">Submit Entry →</button>
-      </div>
+      <div id="total-warning"></div>
     </div>
 
-    <!-- Signed-up list (student sees read-only) -->
-    <div class="table-card">
-      <div style="padding:14px 16px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center">
-        <span style="font-weight:600;font-size:15px">Today's Sign-Ups</span>
-        <span id="entry-count" style="font-size:13px;color:var(--text-muted)">0 entries</span>
-      </div>
-      <div class="table-header">
-        <span>#</span>
-        <span>Name(s)</span>
-        <span>Topic</span>
-        <span>Actions</span>
-      </div>
-      <div id="student-list-body">
-        <div class="empty-state">
-          <div class="empty-icon">📋</div>
-          No entries yet — be the first!
-        </div>
+    <div class="panel">
+      <h2>Saved wheel setups</h2>
+      <div id="setup-list"></div>
+      <div class="empty-msg" id="setup-empty">No saved setups yet</div>
+      <div class="save-row">
+        <input type="text" id="setup-name" placeholder="Name this setup" />
+        <button id="save-setup-btn">Save current</button>
       </div>
     </div>
   </div>
 </div>
 
-<!-- ═══════════ TEACHER LOGIN ═══════════ -->
-<div id="teacher-login-view">
-  <div class="login-wrap">
-    <div class="login-card">
-      <div style="font-size:36px;margin-bottom:0.75rem">🔐</div>
-      <h2>Teacher Login</h2>
-      <p>Enter your credentials to access the teacher dashboard</p>
-      <div class="form-group" style="text-align:left;margin-bottom:1rem">
-        <label>Username</label>
-        <input type="text" id="login-user" placeholder="teacher" autocomplete="off">
-      </div>
-      <div class="form-group" style="text-align:left;margin-bottom:1.5rem">
-        <label>Password</label>
-        <input type="password" id="login-pass" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()">
-      </div>
-      <button class="btn btn-primary" style="width:100%;justify-content:center" onclick="doLogin()">Sign In</button>
-      <div style="margin-top:1rem">
-        <button class="btn btn-sm" style="font-size:13px;color:var(--text-muted);border:none;background:none" onclick="showStudentView()">← Back to Student View</button>
-      </div>
-      <p style="margin-top:1rem;font-size:12px;color:var(--text-light)">Default: admin / classboard2024</p>
-    </div>
-  </div>
-</div>
+<script>
+(function() {
+  const STORAGE_KEY = 'wheelSpin.items';
+  const HISTORY_KEY = 'wheelSpin.history';
+  const SETUPS_KEY = 'wheelSpin.setups';
 
-<!-- ═══════════ TEACHER DASHBOARD ═══════════ -->
-<div id="teacher-dashboard">
-  <div class="main">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem">
-      <div>
-        <h1 class="page-title">Teacher Dashboard</h1>
-        <p style="font-size:14px;color:var(--text-muted)">Manage sign-ups, categories, and class settings</p>
-      </div>
-      <div style="display:flex;gap:8px">
-        <button class="btn" onclick="saveSession()">💾 Save Session</button>
-        <button class="btn btn-warn" onclick="confirmReset()">🔄 Reset for Next Class</button>
-        <button class="btn btn-danger btn-sm" onclick="doLogout()">Logout</button>
-      </div>
-    </div>
+  const colorRamps = [
+    ['#CECBF6', '#3C3489'],
+    ['#9FE1CB', '#085041'],
+    ['#F5C4B3', '#712B13'],
+    ['#F4C0D1', '#72243E'],
+    ['#85B7EB', '#0C447C'],
+    ['#C0DD97', '#27500A'],
+    ['#FAC775', '#633806'],
+    ['#F7C1C1', '#791F1F'],
+    ['#D3D1C7', '#444441']
+  ];
 
-    <!-- Stats -->
-    <div class="stats-row">
-      <div class="stat-card accent">
-        <div class="stat-label">Total Entries</div>
-        <div class="stat-value" id="stat-total">0</div>
-      </div>
-      <div class="stat-card warn">
-        <div class="stat-label">Flagged</div>
-        <div class="stat-value" id="stat-flagged">0</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-label">Edit Requests</div>
-        <div class="stat-value" id="stat-edits">0</div>
-      </div>
-      <div class="stat-card danger">
-        <div class="stat-label">Auto-Removed</div>
-        <div class="stat-value" id="stat-removed">0</div>
-      </div>
-    </div>
+  const defaultItems = [
+    { label: 'Prize A', pct: 25 },
+    { label: 'Prize B', pct: 25 },
+    { label: 'Prize C', pct: 25 },
+    { label: 'Prize D', pct: 25 }
+  ];
 
-    <!-- Tabs -->
-    <div class="teacher-tabs">
-      <button class="tab-btn active" onclick="switchTab('roster')">📋 Roster</button>
-      <button class="tab-btn" onclick="switchTab('mailbox')" id="mailbox-tab-btn">📬 Mailbox</button>
-      <button class="tab-btn" onclick="switchTab('wheel')">🎡 Spin Wheel</button>
-      <button class="tab-btn" onclick="switchTab('categories')">🗂️ Categories</button>
-    </div>
-
-    <!-- ── TAB: ROSTER ── -->
-    <div class="tab-panel active" id="tab-roster">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem">
-        <span style="font-weight:600">All Entries</span>
-        <button class="btn btn-primary btn-sm" onclick="openAddModal()">+ Add Individual</button>
-      </div>
-      <div class="table-card">
-        <div class="teacher-table-header">
-          <span>#</span>
-          <span>Name(s)</span>
-          <span>Topic</span>
-          <span>Status</span>
-          <span>Actions</span>
-        </div>
-        <div id="teacher-list-body">
-          <div class="empty-state">
-            <div class="empty-icon">📋</div>
-            No entries yet
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- ── TAB: MAILBOX ── -->
-    <div class="tab-panel" id="tab-mailbox">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem">
-        <span style="font-weight:600">Inbox</span>
-        <button class="btn btn-sm" onclick="clearReadMail()">Mark all read</button>
-      </div>
-      <div id="mailbox-body">
-        <div class="empty-state">
-          <div class="empty-icon">📭</div>
-          Nothing in your mailbox
-        </div>
-      </div>
-    </div>
-
-    <!-- ── TAB: SPIN WHEEL ── -->
-    <div class="tab-panel" id="tab-wheel">
-      <div class="grid-2">
-        <div class="card">
-          <h3><span class="icon">🎡</span> Group Spinner</h3>
-          <p style="font-size:13px;color:var(--text-muted);margin-bottom:1rem">All submitted group names are added automatically</p>
-          <div class="wheel-wrap">
-            <canvas id="wheelCanvas" width="280" height="280"></canvas>
-            <button class="btn btn-primary spin-btn" onclick="spinWheel()">🎲 Spin!</button>
-          </div>
-          <div class="wheel-result" id="wheel-result"></div>
-        </div>
-        <div class="card">
-          <h3><span class="icon">📋</span> Groups on Wheel</h3>
-          <div id="wheel-group-list" style="display:flex;flex-direction:column;gap:6px;max-height:320px;overflow-y:auto">
-            <p style="font-size:13px;color:var(--text-muted)">No groups yet</p>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- ── TAB: CATEGORIES ── -->
-    <div class="tab-panel" id="tab-categories">
-      <div class="grid-2">
-        <div class="card">
-          <h3><span class="icon">➕</span> Add Category</h3>
-          <div class="form-group" style="margin-bottom:0.75rem">
-            <label>Category Name</label>
-            <input type="text" id="new-cat-name" placeholder="e.g. Subject, Period, Room...">
-          </div>
-          <div class="form-group" style="margin-bottom:0.75rem">
-            <label>Options (comma separated)</label>
-            <input type="text" id="new-cat-options" placeholder="e.g. Math, Science, English">
-          </div>
-          <div class="form-group" style="margin-bottom:1rem">
-            <label>Required?</label>
-            <select id="new-cat-required">
-              <option value="no">No — optional for students</option>
-              <option value="yes">Yes — students must pick one</option>
-            </select>
-          </div>
-          <button class="btn btn-primary" onclick="addCategory()">Add Category</button>
-        </div>
-        <div class="card">
-          <h3><span class="icon">🗂️</span> Active Categories</h3>
-          <div id="category-manager">
-            <p style="font-size:13px;color:var(--text-muted)">No categories yet</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- ═══════════ ADD INDIVIDUAL MODAL ═══════════ -->
-<div class="modal-backdrop" id="add-modal">
-  <div class="modal">
-    <h2>Add Individual Entry</h2>
-    <div class="form-group" style="margin-bottom:0.75rem">
-      <label>Name(s)</label>
-      <input type="text" id="add-name" placeholder="Student / group name">
-    </div>
-    <div class="form-group" style="margin-bottom:0.75rem">
-      <label>Topic</label>
-      <input type="text" id="add-topic" placeholder="Presentation topic">
-    </div>
-    <div class="form-group" style="margin-bottom:0.75rem">
-      <label>Notes (optional)</label>
-      <input type="text" id="add-notes" placeholder="Any extra info">
-    </div>
-    <div class="modal-footer">
-      <button class="btn" onclick="closeModal('add-modal')">Cancel</button>
-      <button class="btn btn-primary" onclick="addIndividual()">Add Entry</button>
-    </div>
-  </div>
-</div>
-
-<!-- ═══════════ EDIT MODAL (TEACHER) ═══════════ -->
-<div class="modal-backdrop" id="edit-modal">
-  <div class="modal">
-    <h2>Edit Entry</h2>
-    <input type="hidden" id="edit-id">
-    <div class="form-group" style="margin-bottom:0.75rem">
-      <label>Name(s)</label>
-      <input type="text" id="edit-name">
-    </div>
-    <div class="form-group" style="margin-bottom:0.75rem">
-      <label>Topic</label>
-      <input type="text" id="edit-topic">
-    </div>
-    <div class="form-group" style="margin-bottom:0.75rem">
-      <label>Notes</label>
-      <input type="text" id="edit-notes">
-    </div>
-    <div class="modal-footer">
-      <button class="btn" onclick="closeModal('edit-modal')">Cancel</button>
-      <button class="btn btn-primary" onclick="saveEdit()">Save Changes</button>
-    </div>
-  </div>
-</div>
-
-<!-- ═══════════ STUDENT EDIT REQUEST MODAL ═══════════ -->
-<div class="modal-backdrop" id="student-edit-modal">
-  <div class="modal">
-    <h2>Request an Edit</h2>
-    <p style="font-size:13px;color:var(--text-muted);margin-bottom:1rem">Your teacher will need to approve this before changes take effect</p>
-    <input type="hidden" id="student-edit-id">
-    <div class="form-group" style="margin-bottom:0.75rem">
-      <label>New Name(s)</label>
-      <input type="text" id="sreq-name">
-    </div>
-    <div class="form-group" style="margin-bottom:0.75rem">
-      <label>New Topic</label>
-      <input type="text" id="sreq-topic">
-    </div>
-    <div class="form-group" style="margin-bottom:0.75rem">
-      <label>Reason for edit</label>
-      <input type="text" id="sreq-reason" placeholder="Briefly explain why...">
-    </div>
-    <div class="modal-footer">
-      <button class="btn" onclick="closeModal('student-edit-modal')">Cancel</button>
-      <button class="btn btn-primary" onclick="submitEditRequest()">Send Request</button>
-    </div>
-  </div>
-</div>
-
-<!-- ═══════════ RESET CONFIRM MODAL ═══════════ -->
-<div class="modal-backdrop" id="reset-modal">
-  <div class="modal">
-    <h2>⚠️ Reset Class Session?</h2>
-    <p style="font-size:14px;color:var(--text-muted);margin-bottom:1.25rem">This will clear <strong>all entries, flags, and edit requests</strong>. A backup will be saved before clearing. This cannot be undone.</p>
-    <div class="modal-footer">
-      <button class="btn" onclick="closeModal('reset-modal')">Cancel</button>
-      <button class="btn btn-danger" onclick="doReset()">Yes, Reset Everything</button>
-    </div>
-  </div>
-</div>
-
-<!-- ═══════════ FIREBASE + SCRIPTS ═══════════ -->
-<script type="module">
-// ──────────────────────────────────────────────
-//  FIREBASE CONFIGURATION
-//  Replace the values below with your own project
-// ──────────────────────────────────────────────
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import {
-  getDatabase, ref, set, push, get, remove, update, onValue, off
-} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
-
-const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_PROJECT.firebaseapp.com",
-  databaseURL: "https://YOUR_PROJECT-default-rtdb.firebaseio.com",
-  projectId: "YOUR_PROJECT_ID",
-  storageBucket: "YOUR_PROJECT.appspot.com",
-  messagingSenderId: "YOUR_SENDER_ID",
-  appId: "YOUR_APP_ID"
-};
-
-// ──────────────────────────────────────────────
-//  INIT
-// ──────────────────────────────────────────────
-const app = initializeApp(firebaseConfig);
-const db  = getDatabase(app);
-
-// ──────────────────────────────────────────────
-//  STATE
-// ──────────────────────────────────────────────
-let isTeacher   = false;
-let entries     = {};   // { id: { name, group, topic, notes, status, timestamp } }
-let mailbox     = {};   // { id: { type:'flag'|'edit', ... } }
-let categories  = {};   // { id: { name, options:[], required } }
-let removedCount = 0;
-let wheelAngle   = 0;
-let wheelSpinning = false;
-
-// ──────────────────────────────────────────────
-//  REALTIME LISTENERS
-// ──────────────────────────────────────────────
-function startListeners() {
-  onValue(ref(db, 'entries'), snap => {
-    entries = snap.val() || {};
-    renderStudentList();
-    if (isTeacher) renderTeacherList();
-    updateStats();
-    updateWheelGroups();
-  });
-
-  onValue(ref(db, 'mailbox'), snap => {
-    mailbox = snap.val() || {};
-    if (isTeacher) renderMailbox();
-    updateStats();
-    updateMailboxBadge();
-  });
-
-  onValue(ref(db, 'categories'), snap => {
-    categories = snap.val() || {};
-    renderCategoryDropdowns();
-    renderCategoryManager();
-  });
-
-  onValue(ref(db, 'settings/removedCount'), snap => {
-    removedCount = snap.val() || 0;
-    if (isTeacher) document.getElementById('stat-removed').textContent = removedCount;
-  });
-}
-
-// ──────────────────────────────────────────────
-//  DUPLICATE / FLAG DETECTION
-// ──────────────────────────────────────────────
-function detectDuplicates(newEntry) {
-  const newNames = newEntry.name.toLowerCase().split(/[,&\/]+/).map(n => n.trim()).filter(Boolean);
-  const newTopic = newEntry.topic.toLowerCase().trim();
-  const newGroup = newEntry.group.toLowerCase().trim();
-
-  for (const [id, e] of Object.entries(entries)) {
-    const existNames = e.name.toLowerCase().split(/[,&\/]+/).map(n => n.trim()).filter(Boolean);
-    const existGroup = (e.group || '').toLowerCase().trim();
-
-    // exact full match → auto-delete incoming
-    const namesOverlap = newNames.some(n => existNames.includes(n));
-    const groupMatch   = newGroup && newGroup === existGroup;
-
-    if ((namesOverlap || groupMatch) && e.topic.toLowerCase().trim() === newTopic) {
-      return { action: 'duplicate', existingId: id };
-    }
-
-    // partial name match but different topic → flag
-    if (namesOverlap && e.topic.toLowerCase().trim() !== newTopic) {
-      return { action: 'flag', reason: `Possible duplicate name: matches "${e.name}" (existing entry #${Object.keys(entries).indexOf(id)+1})` };
+  function loadJSON(key, fallback) {
+    try {
+      const raw = localStorage.getItem(key);
+      if (!raw) return fallback;
+      const parsed = JSON.parse(raw);
+      return parsed;
+    } catch (e) {
+      return fallback;
     }
   }
-  return { action: 'ok' };
-}
-
-// ──────────────────────────────────────────────
-//  SUBMIT ENTRY (student)
-// ──────────────────────────────────────────────
-window.submitEntry = async function() {
-  const name  = document.getElementById('student-name').value.trim();
-  const group = document.getElementById('student-group').value.trim();
-  const topic = document.getElementById('student-topic').value.trim();
-  const notes = document.getElementById('student-notes').value.trim();
-
-  if (!name || !topic || !group) {
-    toast('Please fill in Name, Group, and Topic', 'warn'); return;
+  function saveJSON(key, value) {
+    try {
+      localStorage.setItem(key, JSON.stringify(value));
+    } catch (e) {}
   }
 
-  const newEntry = { name, group, topic, notes, status: 'ok', timestamp: Date.now(), editAllowed: false };
-  const check = detectDuplicates(newEntry);
+  let items = loadJSON(STORAGE_KEY, defaultItems);
+  let history = loadJSON(HISTORY_KEY, []);
+  let setups = loadJSON(SETUPS_KEY, {});
 
-  if (check.action === 'duplicate') {
-    toast('⚠️ That entry already exists — not added', 'warn');
-    removedCount++;
-    set(ref(db, 'settings/removedCount'), removedCount);
-    return;
+  let currentRotation = 0;
+  let spinning = false;
+
+  const wheel = document.getElementById('wheel');
+  const segGroup = document.getElementById('wheel-segments');
+  const itemList = document.getElementById('item-list');
+  const totalWarning = document.getElementById('total-warning');
+  const resultEl = document.getElementById('result');
+  const spinBtn = document.getElementById('spin-btn');
+  const historyListEl = document.getElementById('history-list');
+  const historyEmptyEl = document.getElementById('history-empty');
+  const setupListEl = document.getElementById('setup-list');
+  const setupEmptyEl = document.getElementById('setup-empty');
+
+  function totalPct() {
+    return items.reduce((s, i) => s + i.pct, 0);
   }
 
-  if (check.action === 'flag') {
-    newEntry.status = 'flagged';
-    newEntry.flagReason = check.reason;
-    // add to mailbox
-    push(ref(db, 'mailbox'), {
-      type: 'flag',
-      entryName: name,
-      group,
-      topic,
-      flagReason: check.reason,
-      timestamp: Date.now(),
-      read: false
+  function polarToCartesian(cx, cy, r, angleDeg) {
+    const a = (angleDeg - 90) * Math.PI / 180;
+    return { x: cx + r * Math.cos(a), y: cy + r * Math.sin(a) };
+  }
+
+  function renderWheel() {
+    segGroup.innerHTML = '';
+    const total = totalPct();
+    if (total <= 0 || items.length === 0) return;
+
+    let startAngle = 0;
+    const cx = 160, cy = 160, r = 158;
+
+    items.forEach((item, idx) => {
+      const sweep = (item.pct / total) * 360;
+      const endAngle = startAngle + sweep;
+      const large = sweep > 180 ? 1 : 0;
+      const p1 = polarToCartesian(cx, cy, r, startAngle);
+      const p2 = polarToCartesian(cx, cy, r, endAngle);
+      const ramp = colorRamps[idx % colorRamps.length];
+
+      const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+      const d = `M ${cx} ${cy} L ${p1.x.toFixed(2)} ${p1.y.toFixed(2)} A ${r} ${r} 0 ${large} 1 ${p2.x.toFixed(2)} ${p2.y.toFixed(2)} Z`;
+      path.setAttribute('d', d);
+      path.setAttribute('fill', ramp[0]);
+      path.setAttribute('stroke', '#ffffff');
+      path.setAttribute('stroke-width', '1.5');
+      segGroup.appendChild(path);
+
+      if (sweep > 8) {
+        const midAngle = startAngle + sweep / 2;
+        const labelPos = polarToCartesian(cx, cy, r * 0.62, midAngle);
+        const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        text.setAttribute('x', labelPos.x.toFixed(2));
+        text.setAttribute('y', labelPos.y.toFixed(2));
+        text.setAttribute('text-anchor', 'middle');
+        text.setAttribute('dominant-baseline', 'middle');
+        text.setAttribute('font-size', '12');
+        text.setAttribute('font-weight', '600');
+        text.setAttribute('fill', ramp[1]);
+        text.setAttribute('transform', `rotate(${(midAngle).toFixed(2)} ${labelPos.x.toFixed(2)} ${labelPos.y.toFixed(2)})`);
+        const labelText = item.label.length > 12 ? item.label.slice(0, 11) + '…' : item.label;
+        text.textContent = labelText;
+        segGroup.appendChild(text);
+      }
+
+      startAngle = endAngle;
     });
-    toast('⚠️ Submitted but flagged for teacher review', 'warn');
-  } else {
-    toast('✅ Entry submitted!', 'success');
   }
 
-  const newRef = push(ref(db, 'entries'), newEntry);
+  function renderList() {
+    itemList.innerHTML = '';
+    items.forEach((item, idx) => {
+      const ramp = colorRamps[idx % colorRamps.length];
+      const row = document.createElement('div');
+      row.className = 'item-row';
 
-  // clear form
-  ['student-name','student-group','student-topic','student-notes'].forEach(id => {
-    document.getElementById(id).value = '';
-  });
-};
+      const swatch = document.createElement('div');
+      swatch.className = 'swatch';
+      swatch.style.background = ramp[0];
+      row.appendChild(swatch);
 
-// ──────────────────────────────────────────────
-//  RENDER STUDENT LIST
-// ──────────────────────────────────────────────
-function renderStudentList() {
-  const body = document.getElementById('student-list-body');
-  const arr  = Object.entries(entries);
-  document.getElementById('entry-count').textContent = arr.length + ' entr' + (arr.length === 1 ? 'y' : 'ies');
+      const label = document.createElement('span');
+      label.textContent = item.label;
+      label.className = 'label';
+      row.appendChild(label);
 
-  if (!arr.length) {
-    body.innerHTML = `<div class="empty-state"><div class="empty-icon">📋</div>No entries yet — be the first!</div>`;
-    return;
-  }
+      const pctInput = document.createElement('input');
+      pctInput.type = 'number';
+      pctInput.min = '0';
+      pctInput.max = '100';
+      pctInput.step = '0.1';
+      pctInput.value = item.pct;
+      pctInput.addEventListener('change', () => {
+        const v = parseFloat(pctInput.value);
+        item.pct = isNaN(v) || v < 0 ? 0 : v;
+        pctInput.value = item.pct;
+        persistItems();
+        renderWheel();
+        renderList();
+      });
+      row.appendChild(pctInput);
 
-  body.innerHTML = arr.map(([id, e], i) => {
-    const statusBadge = e.status === 'flagged'
-      ? `<span class="tag tag-flagged">Flagged</span>`
-      : e.editAllowed
-        ? `<span class="tag tag-pending">Edit OK</span>`
-        : `<span class="tag tag-ok">OK</span>`;
+      const pctSign = document.createElement('span');
+      pctSign.textContent = '%';
+      pctSign.className = 'pct-sign';
+      row.appendChild(pctSign);
 
-    const editBtn = e.editAllowed
-      ? `<button class="btn btn-sm" onclick="openStudentEditModal('${id}')">✏️ Edit</button>`
-      : `<button class="btn btn-sm" style="font-size:12px;opacity:0.7" onclick="openStudentEditModal('${id}')">Request Edit</button>`;
+      const delBtn = document.createElement('button');
+      delBtn.textContent = '✕';
+      delBtn.title = 'Remove ' + item.label;
+      delBtn.className = 'icon-btn';
+      delBtn.addEventListener('click', () => {
+        items.splice(idx, 1);
+        persistItems();
+        renderWheel();
+        renderList();
+      });
+      row.appendChild(delBtn);
 
-    return `
-      <div class="table-row">
-        <span class="row-num">${i+1}</span>
-        <span><strong>${esc(e.name)}</strong><br><span style="font-size:12px;color:var(--text-muted)">${esc(e.group)}</span></span>
-        <span>${esc(e.topic)}${e.notes ? `<br><span style="font-size:12px;color:var(--text-muted)">${esc(e.notes)}</span>` : ''}</span>
-        <span style="display:flex;flex-direction:column;gap:4px;align-items:flex-start">${statusBadge}${editBtn}</span>
-      </div>`;
-  }).join('');
-}
+      itemList.appendChild(row);
+    });
 
-// ──────────────────────────────────────────────
-//  RENDER TEACHER LIST
-// ──────────────────────────────────────────────
-function renderTeacherList() {
-  const body = document.getElementById('teacher-list-body');
-  const arr  = Object.entries(entries);
-
-  if (!arr.length) {
-    body.innerHTML = `<div class="empty-state"><div class="empty-icon">📋</div>No entries yet</div>`;
-    return;
-  }
-
-  body.innerHTML = arr.map(([id, e], i) => {
-    const isFlagged = e.status === 'flagged';
-    const statusBadge = isFlagged
-      ? `<span class="tag tag-flagged">⚠ Flagged</span>`
-      : `<span class="tag tag-ok">✓ OK</span>`;
-
-    return `
-      <div class="teacher-table-row${isFlagged ? ' flagged-row' : ''}">
-        <span class="row-num">${i+1}</span>
-        <span>
-          <strong>${esc(e.name)}</strong><br>
-          <span style="font-size:12px;color:var(--text-muted)">${esc(e.group)}</span>
-        </span>
-        <span>${esc(e.topic)}${e.notes ? `<br><span style="font-size:12px;color:var(--text-muted)">${esc(e.notes)}</span>` : ''}</span>
-        <span>
-          ${statusBadge}
-          ${e.editAllowed ? `<br><span class="edit-badge">Edit On</span>` : ''}
-        </span>
-        <span style="display:flex;gap:4px;flex-wrap:wrap">
-          <button class="btn btn-sm" onclick="openEditModal('${id}')">✏️</button>
-          <button class="btn btn-sm" style="font-size:12px" onclick="toggleEditPermission('${id}', ${!!e.editAllowed})">${e.editAllowed ? '🔒' : '🔓'}</button>
-          <button class="btn btn-sm btn-danger" onclick="deleteEntry('${id}')">🗑</button>
-        </span>
-      </div>`;
-  }).join('');
-}
-
-// ──────────────────────────────────────────────
-//  RENDER MAILBOX
-// ──────────────────────────────────────────────
-function renderMailbox() {
-  const body = document.getElementById('mailbox-body');
-  const arr  = Object.entries(mailbox).sort((a,b) => (b[1].timestamp||0) - (a[1].timestamp||0));
-
-  if (!arr.length) {
-    body.innerHTML = `<div class="empty-state"><div class="empty-icon">📭</div>Nothing in your mailbox</div>`;
-    return;
-  }
-
-  body.innerHTML = arr.map(([id, m]) => {
-    const isFlag = m.type === 'flag';
-    const isEdit = m.type === 'edit';
-    const cls    = `mail-item ${m.read ? '' : 'unread'} ${isFlag ? 'flag-type' : isEdit ? 'edit-type' : ''}`;
-    const time   = m.timestamp ? new Date(m.timestamp).toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'}) : '';
-
-    let body = '';
-    if (isFlag) {
-      body = `
-        <div class="mail-subject">🚩 Possible duplicate: <strong>${esc(m.entryName)}</strong> — "${esc(m.topic)}"</div>
-        <div style="font-size:12px;color:var(--text-muted)">${esc(m.flagReason)}</div>
-        <div class="mail-actions">
-          <button class="btn btn-sm" onclick="resolveFlag('${id}')">✅ Clear Flag</button>
-          <button class="btn btn-sm btn-danger" onclick="deleteFlaggedEntry('${id}', '${m.entryName}')">🗑 Remove Entry</button>
-          <button class="btn btn-sm" onclick="markMailRead('${id}')">Mark read</button>
-        </div>`;
-    } else if (isEdit) {
-      body = `
-        <div class="mail-subject">✏️ Edit request from <strong>${esc(m.requestedBy)}</strong></div>
-        <div style="font-size:12px;color:var(--text-muted);margin-bottom:6px">New name: <strong>${esc(m.newName)}</strong> · New topic: <strong>${esc(m.newTopic)}</strong><br>Reason: ${esc(m.reason)}</div>
-        <div class="mail-actions">
-          <button class="btn btn-sm btn-primary" onclick="approveEdit('${id}')">✅ Approve</button>
-          <button class="btn btn-sm btn-danger" onclick="denyEdit('${id}')">✗ Deny</button>
-        </div>`;
-    }
-
-    return `<div class="${cls}" id="mail-${id}">
-      <div class="mail-header">
-        <span class="mail-from">${isFlag ? '⚠️ Auto-Flag' : '📨 Edit Request'}</span>
-        <span class="mail-time">${time}</span>
-      </div>
-      ${body}
-    </div>`;
-  }).join('');
-}
-
-// ──────────────────────────────────────────────
-//  MAILBOX ACTIONS
-// ──────────────────────────────────────────────
-window.resolveFlag = async function(mailId) {
-  // find the entry with matching name
-  const m = mailbox[mailId];
-  if (!m) return;
-  // clear flag on the matching entry
-  for (const [eid, e] of Object.entries(entries)) {
-    if (e.name === m.entryName && e.topic === m.topic) {
-      await update(ref(db, `entries/${eid}`), { status: 'ok', flagReason: null });
-      break;
+    const total = totalPct();
+    const rounded = Math.round(total * 10) / 10;
+    if (items.length === 0) {
+      totalWarning.textContent = 'Add at least one item to spin';
+    } else if (Math.abs(total - 100) > 0.05) {
+      totalWarning.textContent = `Total is ${rounded}% — odds are auto-normalized to 100% when spinning`;
+    } else {
+      totalWarning.textContent = `Total: ${rounded}%`;
     }
   }
-  await remove(ref(db, `mailbox/${mailId}`));
-  toast('Flag cleared', 'success');
-};
 
-window.deleteFlaggedEntry = async function(mailId, entryName) {
-  const m = mailbox[mailId];
-  for (const [eid, e] of Object.entries(entries)) {
-    if (e.name === m.entryName && e.topic === m.topic) {
-      await remove(ref(db, `entries/${eid}`));
-      break;
+  function persistItems() {
+    saveJSON(STORAGE_KEY, items);
+  }
+
+  function renderHistory() {
+    historyListEl.innerHTML = '';
+    if (history.length === 0) {
+      historyEmptyEl.style.display = 'block';
+      return;
     }
+    historyEmptyEl.style.display = 'none';
+    history.slice().reverse().forEach(entry => {
+      const li = document.createElement('li');
+      const labelSpan = document.createElement('span');
+      labelSpan.className = 'h-label';
+      labelSpan.textContent = entry.label;
+      const timeSpan = document.createElement('span');
+      timeSpan.className = 'h-time';
+      timeSpan.textContent = entry.time;
+      li.appendChild(labelSpan);
+      li.appendChild(timeSpan);
+      historyListEl.appendChild(li);
+    });
   }
-  await remove(ref(db, `mailbox/${mailId}`));
-  toast('Entry removed', 'success');
-};
 
-window.approveEdit = async function(mailId) {
-  const m = mailbox[mailId];
-  if (!m || !m.entryId) return;
-  await update(ref(db, `entries/${m.entryId}`), {
-    name: m.newName,
-    topic: m.newTopic,
-    editAllowed: false
+  function addHistoryEntry(label) {
+    const now = new Date();
+    const time = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    history.push({ label, time });
+    if (history.length > 50) history = history.slice(history.length - 50);
+    saveJSON(HISTORY_KEY, history);
+    renderHistory();
+  }
+
+  document.getElementById('clear-history').addEventListener('click', () => {
+    history = [];
+    saveJSON(HISTORY_KEY, history);
+    renderHistory();
   });
-  await remove(ref(db, `mailbox/${mailId}`));
-  toast('Edit approved and applied!', 'success');
-};
 
-window.denyEdit = async function(mailId) {
-  const m = mailbox[mailId];
-  if (m && m.entryId) {
-    await update(ref(db, `entries/${m.entryId}`), { editAllowed: false });
-  }
-  await remove(ref(db, `mailbox/${mailId}`));
-  toast('Edit request denied', 'warn');
-};
-
-window.markMailRead = async function(mailId) {
-  await update(ref(db, `mailbox/${mailId}`), { read: true });
-};
-
-window.clearReadMail = async function() {
-  const toRemove = Object.entries(mailbox).filter(([,m]) => m.read).map(([id]) => id);
-  for (const id of toRemove) await remove(ref(db, `mailbox/${id}`));
-  toast('Cleared read messages', 'success');
-};
-
-// ──────────────────────────────────────────────
-//  STATS
-// ──────────────────────────────────────────────
-function updateStats() {
-  if (!isTeacher) return;
-  const total   = Object.keys(entries).length;
-  const flagged = Object.values(entries).filter(e => e.status === 'flagged').length;
-  const editReqs = Object.values(mailbox).filter(m => m.type === 'edit').length;
-
-  document.getElementById('stat-total').textContent   = total;
-  document.getElementById('stat-flagged').textContent = flagged;
-  document.getElementById('stat-edits').textContent   = editReqs;
-  document.getElementById('stat-removed').textContent = removedCount;
-}
-
-function updateMailboxBadge() {
-  const unread = Object.values(mailbox).filter(m => !m.read).length;
-  const btn = document.getElementById('mailbox-tab-btn');
-  const existing = btn.querySelector('.badge');
-  if (existing) existing.remove();
-  if (unread > 0) {
-    btn.insertAdjacentHTML('beforeend', `<span class="badge">${unread}</span>`);
-  }
-}
-
-// ──────────────────────────────────────────────
-//  TEACHER EDIT MODAL
-// ──────────────────────────────────────────────
-window.openEditModal = function(id) {
-  const e = entries[id];
-  if (!e) return;
-  document.getElementById('edit-id').value    = id;
-  document.getElementById('edit-name').value  = e.name;
-  document.getElementById('edit-topic').value = e.topic;
-  document.getElementById('edit-notes').value = e.notes || '';
-  openModal('edit-modal');
-};
-
-window.saveEdit = async function() {
-  const id    = document.getElementById('edit-id').value;
-  const name  = document.getElementById('edit-name').value.trim();
-  const topic = document.getElementById('edit-topic').value.trim();
-  const notes = document.getElementById('edit-notes').value.trim();
-  if (!name || !topic) { toast('Name and topic required', 'warn'); return; }
-  await update(ref(db, `entries/${id}`), { name, topic, notes });
-  closeModal('edit-modal');
-  toast('Entry updated!', 'success');
-};
-
-// ──────────────────────────────────────────────
-//  TOGGLE EDIT PERMISSION
-// ──────────────────────────────────────────────
-window.toggleEditPermission = async function(id, current) {
-  await update(ref(db, `entries/${id}`), { editAllowed: !current });
-  toast(!current ? '🔓 Edit enabled for student' : '🔒 Edit locked', 'success');
-};
-
-// ──────────────────────────────────────────────
-//  DELETE ENTRY (teacher)
-// ──────────────────────────────────────────────
-window.deleteEntry = async function(id) {
-  if (!confirm('Delete this entry?')) return;
-  await remove(ref(db, `entries/${id}`));
-  toast('Entry deleted', 'success');
-};
-
-// ──────────────────────────────────────────────
-//  ADD INDIVIDUAL (teacher)
-// ──────────────────────────────────────────────
-window.openAddModal = () => openModal('add-modal');
-
-window.addIndividual = async function() {
-  const name  = document.getElementById('add-name').value.trim();
-  const topic = document.getElementById('add-topic').value.trim();
-  const notes = document.getElementById('add-notes').value.trim();
-  if (!name || !topic) { toast('Name and topic required', 'warn'); return; }
-  await push(ref(db, 'entries'), { name, group: name, topic, notes, status: 'ok', timestamp: Date.now(), editAllowed: false, addedByTeacher: true });
-  ['add-name','add-topic','add-notes'].forEach(id => document.getElementById(id).value = '');
-  closeModal('add-modal');
-  toast('Entry added!', 'success');
-};
-
-// ──────────────────────────────────────────────
-//  STUDENT EDIT REQUEST
-// ──────────────────────────────────────────────
-window.openStudentEditModal = function(id) {
-  const e = entries[id];
-  if (!e) return;
-  document.getElementById('student-edit-id').value = id;
-  document.getElementById('sreq-name').value  = e.name;
-  document.getElementById('sreq-topic').value = e.topic;
-  document.getElementById('sreq-reason').value = '';
-  openModal('student-edit-modal');
-};
-
-window.submitEditRequest = async function() {
-  const id     = document.getElementById('student-edit-id').value;
-  const name   = document.getElementById('sreq-name').value.trim();
-  const topic  = document.getElementById('sreq-topic').value.trim();
-  const reason = document.getElementById('sreq-reason').value.trim();
-  const e      = entries[id];
-  if (!name || !topic) { toast('Fill in name and topic', 'warn'); return; }
-  if (!reason) { toast('Please provide a reason', 'warn'); return; }
-
-  await push(ref(db, 'mailbox'), {
-    type: 'edit',
-    entryId: id,
-    requestedBy: e.name,
-    newName: name,
-    newTopic: topic,
-    reason,
-    timestamp: Date.now(),
-    read: false
-  });
-  closeModal('student-edit-modal');
-  toast('Edit request sent to teacher!', 'success');
-};
-
-// ──────────────────────────────────────────────
-//  CATEGORIES
-// ──────────────────────────────────────────────
-window.addCategory = async function() {
-  const name    = document.getElementById('new-cat-name').value.trim();
-  const optRaw  = document.getElementById('new-cat-options').value.trim();
-  const req     = document.getElementById('new-cat-required').value;
-
-  if (!name || !optRaw) { toast('Name and options required', 'warn'); return; }
-  const options = optRaw.split(',').map(o => o.trim()).filter(Boolean);
-
-  await push(ref(db, 'categories'), { name, options, required: req === 'yes' });
-  document.getElementById('new-cat-name').value    = '';
-  document.getElementById('new-cat-options').value = '';
-  toast('Category added!', 'success');
-};
-
-window.deleteCategory = async function(id) {
-  await remove(ref(db, `categories/${id}`));
-  toast('Category removed', 'success');
-};
-
-function renderCategoryDropdowns() {
-  const container = document.getElementById('category-dropdowns');
-  const arr = Object.entries(categories);
-  if (!arr.length) { container.innerHTML = ''; return; }
-  container.innerHTML = `<div class="form-row">` + arr.map(([id, cat]) => `
-    <div class="form-group">
-      <label>${esc(cat.name)}${cat.required ? ' <span style="color:var(--danger)">*</span>' : ''}</label>
-      <select id="cat-${id}">
-        <option value="">— Select —</option>
-        ${cat.options.map(o => `<option value="${esc(o)}">${esc(o)}</option>`).join('')}
-      </select>
-    </div>`
-  ).join('') + `</div>`;
-}
-
-function renderCategoryManager() {
-  const container = document.getElementById('category-manager');
-  const arr = Object.entries(categories);
-  if (!arr.length) { container.innerHTML = '<p style="font-size:13px;color:var(--text-muted)">No categories yet</p>'; return; }
-  container.innerHTML = `<div class="category-list">` + arr.map(([id, cat]) => `
-    <div class="category-item">
-      <div class="category-item-header">
-        <span class="category-name">${esc(cat.name)} ${cat.required ? '<span class="tag tag-flagged" style="font-size:11px">Required</span>' : ''}</span>
-        <button class="btn btn-sm btn-danger" onclick="deleteCategory('${id}')">🗑</button>
-      </div>
-      <div class="option-chips">
-        ${cat.options.map(o => `<span class="chip">${esc(o)}</span>`).join('')}
-      </div>
-    </div>`
-  ).join('') + `</div>`;
-}
-
-// ──────────────────────────────────────────────
-//  SPIN WHEEL
-// ──────────────────────────────────────────────
-function updateWheelGroups() {
-  const groups = [...new Set(Object.values(entries).map(e => e.group).filter(Boolean))];
-  const listEl = document.getElementById('wheel-group-list');
-  if (!groups.length) {
-    listEl.innerHTML = '<p style="font-size:13px;color:var(--text-muted)">No groups yet</p>';
-  } else {
-    listEl.innerHTML = groups.map((g,i) => `
-      <div style="display:flex;align-items:center;gap:8px;font-size:14px">
-        <span style="width:22px;height:22px;border-radius:50%;background:${wheelColors[i % wheelColors.length]};display:inline-block;flex-shrink:0"></span>
-        ${esc(g)}
-      </div>`).join('');
-  }
-  drawWheel(groups);
-}
-
-const wheelColors = ['#52B788','#E63946','#457B9D','#E9C46A','#9B5DE5','#F77F00','#2EC4B6','#FF6B6B'];
-
-function drawWheel(groups) {
-  const canvas = document.getElementById('wheelCanvas');
-  if (!canvas) return;
-  const ctx = canvas.getContext('2d');
-  const cx = canvas.width / 2, cy = canvas.height / 2, r = cx - 10;
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-  if (!groups.length) {
-    ctx.fillStyle = '#E2DDD5';
-    ctx.beginPath();
-    ctx.arc(cx, cy, r, 0, Math.PI*2);
-    ctx.fill();
-    ctx.fillStyle = '#7A756D';
-    ctx.font = '14px DM Sans';
-    ctx.textAlign = 'center';
-    ctx.fillText('No groups yet', cx, cy);
-    return;
-  }
-
-  const slice = (Math.PI * 2) / groups.length;
-
-  groups.forEach((g, i) => {
-    const start = wheelAngle + i * slice;
-    const end   = start + slice;
-
-    ctx.beginPath();
-    ctx.moveTo(cx, cy);
-    ctx.arc(cx, cy, r, start, end);
-    ctx.closePath();
-    ctx.fillStyle = wheelColors[i % wheelColors.length];
-    ctx.fill();
-    ctx.strokeStyle = '#fff';
-    ctx.lineWidth = 2;
-    ctx.stroke();
-
-    // text
-    ctx.save();
-    ctx.translate(cx, cy);
-    ctx.rotate(start + slice / 2);
-    ctx.textAlign = 'right';
-    ctx.fillStyle = '#fff';
-    ctx.font = `bold ${Math.max(9, Math.min(13, 120 / groups.length))}px DM Sans`;
-    const maxW = r * 0.75;
-    let label = g;
-    if (ctx.measureText(label).width > maxW) {
-      while (ctx.measureText(label + '…').width > maxW && label.length > 1) label = label.slice(0, -1);
-      label += '…';
+  function renderSetups() {
+    setupListEl.innerHTML = '';
+    const names = Object.keys(setups);
+    if (names.length === 0) {
+      setupEmptyEl.style.display = 'block';
+      return;
     }
-    ctx.fillText(label, r - 12, 5);
-    ctx.restore();
+    setupEmptyEl.style.display = 'none';
+    names.forEach(name => {
+      const row = document.createElement('div');
+      row.className = 'setup-row';
+
+      const label = document.createElement('span');
+      label.className = 'label';
+      label.textContent = name;
+      row.appendChild(label);
+
+      const loadBtn = document.createElement('button');
+      loadBtn.textContent = 'Load';
+      loadBtn.addEventListener('click', () => {
+        items = JSON.parse(JSON.stringify(setups[name]));
+        persistItems();
+        renderWheel();
+        renderList();
+      });
+      row.appendChild(loadBtn);
+
+      const delBtn = document.createElement('button');
+      delBtn.textContent = '✕';
+      delBtn.title = 'Delete setup';
+      delBtn.className = 'icon-btn';
+      delBtn.addEventListener('click', () => {
+        delete setups[name];
+        saveJSON(SETUPS_KEY, setups);
+        renderSetups();
+      });
+      row.appendChild(delBtn);
+
+      setupListEl.appendChild(row);
+    });
+  }
+
+  document.getElementById('save-setup-btn').addEventListener('click', () => {
+    const nameInput = document.getElementById('setup-name');
+    const name = nameInput.value.trim();
+    if (!name) return;
+    if (items.length === 0) return;
+    setups[name] = JSON.parse(JSON.stringify(items));
+    saveJSON(SETUPS_KEY, setups);
+    nameInput.value = '';
+    renderSetups();
+  });
+  document.getElementById('setup-name').addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') document.getElementById('save-setup-btn').click();
   });
 
-  // centre circle
-  ctx.beginPath();
-  ctx.arc(cx, cy, 18, 0, Math.PI*2);
-  ctx.fillStyle = '#fff';
-  ctx.fill();
-  ctx.strokeStyle = '#C8C3BA';
-  ctx.lineWidth = 2;
-  ctx.stroke();
+  document.getElementById('add-btn').addEventListener('click', () => {
+    const labelInput = document.getElementById('new-label');
+    const pctInput = document.getElementById('new-pct');
+    const label = labelInput.value.trim();
+    let pct = parseFloat(pctInput.value);
+    if (!label) return;
+    if (isNaN(pct) || pct < 0) pct = 0;
+    items.push({ label, pct });
+    labelInput.value = '';
+    pctInput.value = '';
+    persistItems();
+    renderWheel();
+    renderList();
+  });
+  document.getElementById('new-label').addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') document.getElementById('add-btn').click();
+  });
+  document.getElementById('new-pct').addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') document.getElementById('add-btn').click();
+  });
 
-  // pointer
-  ctx.beginPath();
-  ctx.moveTo(cx + r + 4, cy);
-  ctx.lineTo(cx + r - 14, cy - 9);
-  ctx.lineTo(cx + r - 14, cy + 9);
-  ctx.closePath();
-  ctx.fillStyle = '#1A1815';
-  ctx.fill();
-}
+  spinBtn.addEventListener('click', () => {
+    if (spinning) return;
+    const total = totalPct();
+    if (items.length === 0 || total <= 0) return;
+    spinning = true;
+    spinBtn.disabled = true;
+    resultEl.textContent = '';
 
-window.spinWheel = function() {
-  const groups = [...new Set(Object.values(entries).map(e => e.group).filter(Boolean))];
-  if (!groups.length || wheelSpinning) return;
+    let r = Math.random() * total;
+    let cumulative = 0;
+    let winnerIdx = 0;
+    let startAngle = 0;
+    let winnerStart = 0, winnerEnd = 0;
 
-  wheelSpinning = true;
-  document.getElementById('wheel-result').textContent = '';
-  const extra    = Math.PI * 2 * (8 + Math.random() * 6);
-  const duration = 3500;
-  const start    = performance.now();
-  const startAngle = wheelAngle;
-  const targetAngle = startAngle + extra;
+    for (let i = 0; i < items.length; i++) {
+      const sweep = (items[i].pct / total) * 360;
+      cumulative += items[i].pct;
+      if (r <= cumulative) {
+        winnerIdx = i;
+        winnerStart = startAngle;
+        winnerEnd = startAngle + sweep;
+        break;
+      }
+      startAngle += sweep;
+    }
 
-  function frame(now) {
-    const elapsed = now - start;
-    const t = Math.min(elapsed / duration, 1);
-    const ease = 1 - Math.pow(1 - t, 4);
-    wheelAngle = startAngle + (targetAngle - startAngle) * ease;
-    drawWheel(groups);
+    const winnerMid = (winnerStart + winnerEnd) / 2;
+    const extraSpins = 5 + Math.floor(Math.random() * 3);
+    const targetRotation = currentRotation - (currentRotation % 360) + extraSpins * 360 + (360 - winnerMid);
 
-    if (t < 1) { requestAnimationFrame(frame); return; }
+    currentRotation = targetRotation;
+    wheel.style.transform = `rotate(${currentRotation}deg)`;
 
-    wheelAngle = targetAngle;
-    wheelSpinning = false;
-    const slice  = (Math.PI * 2) / groups.length;
-    // pointer is at angle 0 (right). Normalize wheel angle.
-    const norm   = ((2*Math.PI - (wheelAngle % (Math.PI*2))) + Math.PI*2) % (Math.PI*2);
-    const winner = groups[Math.floor(norm / slice) % groups.length];
-    document.getElementById('wheel-result').textContent = '🎉 ' + winner;
-    toast('🎉 Winner: ' + winner, 'success');
-  }
-  requestAnimationFrame(frame);
-};
+    setTimeout(() => {
+      const winnerLabel = items[winnerIdx].label;
+      resultEl.textContent = `Result: ${winnerLabel}`;
+      addHistoryEntry(winnerLabel);
+      spinning = false;
+      spinBtn.disabled = false;
+    }, 4100);
+  });
 
-// ──────────────────────────────────────────────
-//  SAVE / RESET
-// ──────────────────────────────────────────────
-window.saveSession = async function() {
-  const sessionData = {
-    entries,
-    mailbox,
-    savedAt: Date.now(),
-    savedAtISO: new Date().toISOString()
-  };
-  const dateStr = new Date().toLocaleDateString('en-CA').replace(/-/g,'');
-  await set(ref(db, `sessions/session_${dateStr}_${Date.now()}`), sessionData);
-  toast('Session saved!', 'success');
-};
-
-window.confirmReset = () => openModal('reset-modal');
-
-window.doReset = async function() {
-  // save first
-  await saveSession();
-  await set(ref(db, 'entries'), null);
-  await set(ref(db, 'mailbox'), null);
-  await set(ref(db, 'settings/removedCount'), 0);
-  closeModal('reset-modal');
-  toast('Class reset! Ready for next group.', 'success');
-};
-
-// ──────────────────────────────────────────────
-//  AUTH
-// ──────────────────────────────────────────────
-window.showTeacherLogin = function() {
-  document.getElementById('student-view').style.display      = 'none';
-  document.getElementById('teacher-login-view').style.display = 'flex';
-  document.getElementById('teacher-dashboard').style.display  = 'none';
-};
-
-window.showStudentView = function() {
-  document.getElementById('student-view').style.display       = 'block';
-  document.getElementById('teacher-login-view').style.display = 'none';
-  document.getElementById('teacher-dashboard').style.display  = 'none';
-  document.getElementById('header-status').textContent = 'Student View';
-  document.getElementById('teacher-toggle-btn').textContent = '🔒 Teacher Login';
-  isTeacher = false;
-};
-
-window.doLogin = async function() {
-  const user = document.getElementById('login-user').value.trim();
-  const pass = document.getElementById('login-pass').value.trim();
-
-  // Load credentials from Firebase
-  const snap = await get(ref(db, 'settings/teacherAuth'));
-  const auth = snap.val() || { username: 'admin', password: 'classboard2024' };
-
-  if (user === auth.username && pass === auth.password) {
-    isTeacher = true;
-    document.getElementById('teacher-login-view').style.display = 'none';
-    document.getElementById('teacher-dashboard').style.display  = 'block';
-    document.getElementById('header-status').textContent = '🔓 Teacher Mode';
-    document.getElementById('teacher-toggle-btn').textContent = '← Student View';
-    document.getElementById('teacher-toggle-btn').onclick = showStudentView;
-    renderTeacherList();
-    renderMailbox();
-    updateStats();
-    updateMailboxBadge();
-    toast('Welcome back, teacher!', 'success');
-  } else {
-    toast('Incorrect credentials', 'error');
-  }
-};
-
-window.doLogout = function() {
-  isTeacher = false;
-  showStudentView();
-};
-
-// ──────────────────────────────────────────────
-//  TAB SWITCHING
-// ──────────────────────────────────────────────
-window.switchTab = function(name) {
-  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
-  document.getElementById(`tab-${name}`).classList.add('active');
-  event.target.classList.add('active');
-  if (name === 'wheel') updateWheelGroups();
-};
-
-// ──────────────────────────────────────────────
-//  MODAL HELPERS
-// ──────────────────────────────────────────────
-window.openModal  = id => document.getElementById(id).classList.add('open');
-window.closeModal = id => document.getElementById(id).classList.remove('open');
-document.querySelectorAll('.modal-backdrop').forEach(m => {
-  m.addEventListener('click', e => { if (e.target === m) m.classList.remove('open'); });
-});
-
-// ──────────────────────────────────────────────
-//  TOAST
-// ──────────────────────────────────────────────
-window.toast = function(msg, type = '') {
-  const el = document.getElementById('toast');
-  el.textContent = msg;
-  el.className = 'show ' + type;
-  clearTimeout(el._t);
-  el._t = setTimeout(() => el.className = '', 3500);
-};
-
-// ──────────────────────────────────────────────
-//  UTIL
-// ──────────────────────────────────────────────
-function esc(s) {
-  if (!s) return '';
-  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-}
-
-// ──────────────────────────────────────────────
-//  BOOT
-// ──────────────────────────────────────────────
-startListeners();
+  renderWheel();
+  renderList();
+  renderHistory();
+  renderSetups();
+})();
 </script>
+
 </body>
 </html>
